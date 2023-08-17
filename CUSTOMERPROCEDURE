@@ -1,0 +1,19 @@
+create or replace PROCEDURE        CUSTOMERPROCEDURE(
+    empid IN NUMBER,
+    c_cursor OUT SYS_REFCURSOR,
+    o_sqlcode OUT NUMBER,
+    o_sqlmsg OUT VARCHAR2)
+    AS
+BEGIN
+    o_sqlcode:=0;
+    o_sqlmsg:='success';
+    open c_cursor for
+        select e.employeeid, e.salary, e.firstname, e.lastname from testdb.employees e where e.employeeid = empid;
+    
+  EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        o_sqlcode:=SQLCODE;
+        o_sqlmsg:='Could not get employeeid';
+        DBMS_OUTPUT.PUT_LINE('CUS - Error '||o_sqlcode||' - ');
+END;
